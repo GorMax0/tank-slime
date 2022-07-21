@@ -1,0 +1,2 @@
+Warning: None triangle mesh: PineTree_4 (file: 'E:\_Vampiruga_\Unity\Torture\Tank-slime\Assets\Map\PineTree_4.fbx') []
+Warning: Mesh PineTree_4 without valid vertices (file: 'E:\_Vampiruga_\Unity\Torture\Tank-slime\Assets\Map\PineTree_4.fbx') []
