@@ -1,13 +1,14 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Dreamteck.Splines;
 
 [RequireComponent(typeof(SplineFollower))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private ControlButton _buttonForward;
-    [SerializeField] private ControlButton _buttonBackward;
-    [SerializeField] private ControlButton _buttonFire;
+    [SerializeField] private Bullet _bullet;
+    [SerializeField] private ShotZone _shotZone;
+    [Header("Control Buttons")]
+    [SerializeField] private MoverButton _buttonForward;
+    [SerializeField] private MoverButton _buttonBackward;
 
     private SplineFollower _follower;
 
@@ -18,31 +19,39 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        _buttonForward.PointerDown += Move;
-        _buttonForward.PointerUp += Move;
-        _buttonBackward.PointerDown += Move;
-        _buttonBackward.PointerUp += Move;
+        _buttonForward.Clicked += Move;
+        _buttonBackward.Clicked += Move;
+        _shotZone.Clicked += Shoot;
     }
 
     private void OnDisable()
     {
-        _buttonForward.PointerDown -= Move;
-        _buttonForward.PointerUp -= Move;
-        _buttonBackward.PointerDown -= Move;
-        _buttonBackward.PointerUp -= Move;
+        _buttonForward.Clicked -= Move;
+        _buttonBackward.Clicked -= Move;
+        _shotZone.Clicked -= Shoot;
     }
 
-    public void Move(bool isClick, Spline.Direction direction)
+    private void Move(bool isClick, Spline.Direction direction)
     {
         if (_follower.direction != direction)
             _follower.direction = direction;
 
-        _follower.follow = isClick;
+        _follower.follow = isClick;       
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void Shoot(Vector3 target)
     {
-        if (collision.collider.TryGetComponent(out Obstacle obstacle))
+        if (_bullet.gameObject.activeSelf == true)
+            return;
+
+        _bullet.gameObject.transform.position = target;
+        
+        _bullet.gameObject.SetActive(true);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out StopPoint stopPoint))
             _follower.follow = false;
     }
 }
