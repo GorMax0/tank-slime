@@ -1,14 +1,26 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
+using Dreamteck.Splines;
 
-[RequireComponent(typeof(Button))]
 public class ControlButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    private Button _button;
+    [SerializeField] private Spline.Direction _direction;
 
-    private void OnEnable()
+    private bool _isClick;
+
+    public event UnityAction<bool, Spline.Direction> PointerDown;
+    public event UnityAction<bool, Spline.Direction> PointerUp;
+
+    public void OnPointerDown(PointerEventData eventData)
     {
-        
+        _isClick = true;
+        PointerDown?.Invoke(_isClick, _direction);
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        _isClick = false;
+        PointerUp?.Invoke(_isClick , _direction);
     }
 }
