@@ -4,7 +4,7 @@ using Dreamteck.Splines;
 [RequireComponent(typeof(SplineFollower))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Bullet _bullet;
+    [SerializeField] private BulletPool _bulletPool;
     [SerializeField] private ShotZone _shotZone;
     [Header("Control Buttons")]
     [SerializeField] private MoverButton _buttonForward;
@@ -41,12 +41,7 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot(Vector3 target)
     {
-        if (_bullet.gameObject.activeSelf == true)
-            return;
-
-        _bullet.gameObject.transform.position = target;
-        
-        _bullet.gameObject.SetActive(true);
+        _bulletPool.InvokeBullet(target);
     }
 
     private void OnTriggerEnter(Collider other)

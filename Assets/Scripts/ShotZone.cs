@@ -7,8 +7,7 @@ public class ShotZone : MonoBehaviour, IPointerDownHandler
     public event UnityAction<Vector3> Clicked;
 
     public void OnPointerDown(PointerEventData eventData)
-    {
-        
+    {        
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         Physics.Raycast(ray, out hit);
@@ -17,7 +16,6 @@ public class ShotZone : MonoBehaviour, IPointerDownHandler
             Vector3 targetPosition = hit.point;
             Debug.Log(targetPosition);
             Clicked?.Invoke(targetPosition);
-        }
-        
+        }        
     }
 }
