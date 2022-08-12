@@ -1,25 +1,25 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
-using Dreamteck.Splines;
 
 public class MoverButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] private Spline.Direction _direction;
 
-    private bool _isClick;
+    [SerializeField] private bool _isMoveForward;
 
-    public event UnityAction<bool, Spline.Direction> Clicked;
+    private bool _isMove;
+
+    public event UnityAction<bool, bool> Moved;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _isClick = true;
-        Clicked?.Invoke(_isClick, _direction);
+        _isMove = true;
+        Moved?.Invoke(_isMove, _isMoveForward);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        _isClick = false;
-        Clicked?.Invoke(_isClick , _direction);
+        _isMove = false;
+        Moved?.Invoke(_isMove, _isMoveForward);
     }
 }
