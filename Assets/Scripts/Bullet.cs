@@ -5,15 +5,16 @@ public class Bullet : MonoBehaviour
 {
     private Rigidbody _rigidbody;
 
-    private void Awake()
+    private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    public void Move(Vector3 shootPoint, Vector3 target)
+    public void Move(Vector3 shootPoint, Quaternion rotation, Vector3 target)
     {
         transform.position = shootPoint;
-
+        transform.rotation = rotation;
+      
         Vector3 directionToTarget = target - transform.position;
         Vector3 directionByXZ = new Vector3(directionToTarget.x, 0f, directionToTarget.z);
 
@@ -24,7 +25,12 @@ public class Bullet : MonoBehaviour
 
         int degree = 2;
         float trajectory = Mathf.Sqrt(Mathf.Abs((gravity * Mathf.Pow(distanceInDirectLine, degree) / (degree * (heigth - Mathf.Tan(angleInRadians)) * distanceInDirectLine) * Mathf.Pow(Mathf.Cos(angleInRadians), degree))));
-
+        
         _rigidbody.velocity = transform.forward * trajectory;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        gameObject.SetActive(false);
     }
 }

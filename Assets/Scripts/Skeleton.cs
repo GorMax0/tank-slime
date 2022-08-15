@@ -13,11 +13,11 @@ public class Skeleton : MonoBehaviour
     [SerializeField] private Bone _muzzle;
     [SerializeField] private Rigidbody _rigidbodyRootBone;
     [Header("Spring Joint Settings")]
-    [SerializeField] private float _spring;
+    [SerializeField] private float _defaultSpring;
     [SerializeField] private float _damper;
     [Header("Other Settings")]
-//    [SerializeField] private float _collidarRadius = 0.002f;
- //   [SerializeField] private float _angularDrag = 10f;
+    [SerializeField, Range(0.002f, 0.7f)] private float _collidarRadius;
+    [SerializeField] private float _angularDrag = 10f;
     [SerializeField] private PlayerController _playerController;
 
     private List<Bone[]> _allBones = new List<Bone[]>();
@@ -54,45 +54,21 @@ public class Skeleton : MonoBehaviour
         {
             for (int j = 0; j < _allBones[i].Length; j++)
             {
+                _allBones[i][j].Init(_defaultSpring, _collidarRadius, _angularDrag);
+
                 if (i < _allBones.Count - 1)
                 {
-                    _allBones[i][j].SettingJoint(_allBones[i + 1][j].GetComponent<Rigidbody>(), _spring, _damper);
+                    _allBones[i][j].SettingJoint(_allBones[i + 1][j].GetComponent<Rigidbody>(), _damper);
 
                     if (i > 0)
-                        _allBones[i][j].SettingJoint(_allBones[i - 1][j].GetComponent<Rigidbody>(), _spring, _damper);
+                        _allBones[i][j].SettingJoint(_allBones[i - 1][j].GetComponent<Rigidbody>(), _damper);
                     else
-                        _allBones[i][j].SettingJoint(_allBones[_allBones.Count - 1][j].GetComponent<Rigidbody>(), _spring, _damper);
-
-                    //_allBones[i][j].SettingJoint(_allBones[i + 1][j].GetComponent<Rigidbody>(), _spring, _damper);
+                        _allBones[i][j].SettingJoint(_allBones[_allBones.Count - 1][j].GetComponent<Rigidbody>(), _damper);
                 }
                 else
                 {
-                    _allBones[i][j].SettingJoint(_allBones[_allBones.Count - 1 - i][j].GetComponent<Rigidbody>(), _spring, _damper);
-                    _allBones[i][j].SettingJoint(_allBones[i - 1][j].GetComponent<Rigidbody>(), _spring, _damper);
-                }
-            }
-        }
-    }
-
-    private void ConnectArounds()
-    {
-        foreach (Bone[] bones in _allBones)
-        {
-            for (int i = 0; i < bones.Length; i++)
-            {
-                if (i < bones.Length - 1)
-                {
-                    if (i > 0)
-                        bones[i].SettingJoint(bones[i - 1].GetComponent<Rigidbody>(), _spring, _damper);
-                    else
-                        bones[i].SettingJoint(bones[bones.Length - 1].GetComponent<Rigidbody>(), _spring, _damper);
-
-                    bones[i].SettingJoint(bones[i + 1].GetComponent<Rigidbody>(), _spring, _damper);
-                }
-                else
-                {
-                    bones[i].SettingJoint(bones[bones.Length - 1 - i].GetComponent<Rigidbody>(), _spring, _damper);
-                    bones[i].SettingJoint(bones[i - 1].GetComponent<Rigidbody>(), _spring, _damper);
+                    _allBones[i][j].SettingJoint(_allBones[_allBones.Count - 1 - i][j].GetComponent<Rigidbody>(), _damper);
+                    _allBones[i][j].SettingJoint(_allBones[i - 1][j].GetComponent<Rigidbody>(), _damper);
                 }
             }
         }

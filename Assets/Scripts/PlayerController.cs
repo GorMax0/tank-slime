@@ -37,8 +37,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_canMove == true)
         {
-           // transform.Translate(_direction * _moveSpeed * Time.fixedDeltaTime);
-              _mover.AddForce(_direction * _moveSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);           
+            transform.Translate(_direction * _moveSpeed * Time.fixedDeltaTime);
             _mover.transform.localRotation *= Quaternion.AngleAxis(_turnSpeed * Time.fixedDeltaTime, _rotationDirection);
             _mover.isKinematic = false;
         }
@@ -62,13 +61,5 @@ public class PlayerController : MonoBehaviour
     private void OnShoot(Vector3 target)
     {
         _bulletPool.InvokeBullet(target);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out StopPoint stopPoint))
-        {
-            _canMove = false;
-        }
     }
 }

@@ -15,13 +15,14 @@ public class BulletPool : MonoBehaviour
             _bullet.transform.position = transform.position;
             _bullet.transform.rotation = transform.rotation;
             _bullet.gameObject.SetActive(true);
+            
         }
         else
         {
             CreateBullet(_shootPoint, target);
         }
 
-        _bullet.Move(_shootPoint.transform.position, target);
+        _bullet.Move(_shootPoint.transform.position, transform.rotation, target);
     }
 
     private bool HasFreeBullet()

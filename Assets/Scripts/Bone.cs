@@ -7,7 +7,9 @@ public class Bone : MonoBehaviour
     private Rigidbody _rigidbody;
     private SphereCollider _sphereCollider;
     private SpringJoint[] _springJoints;
-    private float _damping = 0.95f;
+    private float _minSpring = 10f;
+    private float _maxSpring;
+    private float _damping = 0.90f;
     private bool _isStopped;
 
     private void Awake()
@@ -28,13 +30,57 @@ public class Bone : MonoBehaviour
         }
     }
 
+    public void Init(float maxSpring, float radius, float angularDrag)
+    {
+        _maxSpring = maxSpring;
+        SetColliderSize(radius);
+        SetAngularDrag(angularDrag);
+    }
+
+    public void SettingJoint(Rigidbody bone, float damper)
+    {
+        if (bone == null)
+            throw new ArgumentNullException(nameof(bone));
+
+        foreach (var joint in _springJoints)
+        {
+            if (joint.connectedBody == null)
+            {
+                joint.connectedBody = bone;
+                joint.spring = _maxSpring;
+                joint.damper = damper;
+                return;
+            }
+        }
+    }
+    public void StopMovement(bool isStopped)
+    {
+        _isStopped = isStopped;
+    }
+
+    private void SetColliderSize(float radius)
+    {
+        if (radius <= 0)
+            throw new ArgumentOutOfRangeException(nameof(radius));
+
+        _sphereCollider.radius = radius;
+    }
+
+    private void SetAngularDrag(float angularDrag)
+    {
+        if (angularDrag < 0)
+            throw new ArgumentOutOfRangeException(nameof(angularDrag));
+
+        _rigidbody.angularDrag = angularDrag;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.TryGetComponent(out Ground ground))
         {
             foreach (var joint in _springJoints)
             {
-                joint.spring = 10f;
+                joint.spring = _minSpring;
             }
         }
     }
@@ -45,45 +91,8 @@ public class Bone : MonoBehaviour
         {
             foreach (var joint in _springJoints)
             {
-                joint.spring = 150f;
+                joint.spring = _maxSpring;
             }
         }
-    }
-    public void SetColliderSize(float radius)
-    {
-        if (radius <= 0)
-            _sphereCollider.radius = 0.001f;
-        else
-            _sphereCollider.radius = radius;
-    }
-
-    public void SetAngularDrag(float angularDrag)
-    {
-        if (angularDrag < 0)
-            _rigidbody.angularDrag = 0;
-        else
-            _rigidbody.angularDrag = angularDrag;
-    }
-
-    public void SettingJoint(Rigidbody bone, float spring, float damper)
-    {
-        if (bone == null)
-            throw new ArgumentNullException(nameof(bone));
-
-        foreach (var joint in _springJoints)
-        {
-            if (joint.connectedBody == null)
-            {
-                joint.connectedBody = bone;
-                joint.spring = spring;
-                joint.damper = damper;
-                return;
-            }
-        }
-    }
-
-    public void StopMovement(bool isStopped)
-    {
-      //  _isStopped = isStopped;
     }
 }
