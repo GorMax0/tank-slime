@@ -10,35 +10,31 @@ public class BulletPool : MonoBehaviour
 
     public void InvokeBullet(Vector3 target)
     {
-        if (HasFreeBullet() == true)
-        {
-            _bullet.transform.position = transform.position;
-            _bullet.transform.rotation = transform.rotation;
-            _bullet.gameObject.SetActive(true);
-            
-        }
-        else
-        {
-            CreateBullet(_shootPoint, target);
-        }
+        Bullet freeBullet = GetFreeBullet();
 
-        _bullet.Move(_shootPoint.transform.position, transform.rotation, target);
+        freeBullet.transform.position = transform.position;
+        freeBullet.transform.rotation = transform.rotation;
+        freeBullet.gameObject.SetActive(true);
+
+        freeBullet.Launch(_shootPoint.transform.position, _shootPoint.transform.rotation, target);
     }
 
-    private bool HasFreeBullet()
+    private Bullet GetFreeBullet()
     {
         foreach (Bullet bullet in _bullets)
         {
             if (bullet.gameObject.activeSelf == false)
-                return true;
+                return bullet;
         }
 
-        return false;
+        return CreateBullet();
     }
 
-    private void CreateBullet(ShootPoint shootPoint,Vector3 target)
+    private Bullet CreateBullet()
     {
-        Bullet newBullet = Instantiate(_bullet, shootPoint.transform.position, transform.rotation, transform);
+        Bullet newBullet = Instantiate(_bullet, _shootPoint.transform.position, _shootPoint.transform.rotation, transform);
         _bullets.Add(newBullet);
+
+        return newBullet;
     }
 }
