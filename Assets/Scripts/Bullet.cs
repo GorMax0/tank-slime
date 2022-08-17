@@ -55,16 +55,26 @@ public class Bullet : MonoBehaviour
         float cosTheta = Mathf.Cos(Mathf.Atan(tanTheta));
         float sinTheta = cosTheta * tanTheta;
 
-        Vector3 prev = transform.position, next;
-        for (int i = 1; i <= 10; i++)
-        {
-            float t = i / 10f;
-            float dx = s * cosTheta * t;
-            float dy = s * sinTheta * t - 0.5f * g * t * t;
-            next = transform.position + new Vector3(dir.x * dx, dy, dir.y * dx);
-            Debug.DrawLine(prev, next, Color.blue);
-            prev = next;
-        }
+        Vector3 launchVelocity = new Vector3(s * cosTheta * dir.x, s * sinTheta, s * cosTheta * dir.y);
+
+        Vector3 d = launchVelocity;
+        d.y -= 9.81f * Time.fixedDeltaTime;
+        transform.localRotation = Quaternion.LookRotation(d);
+
+        Vector3 p = transform.position + launchVelocity * Time.fixedDeltaTime;
+        p.y -= 0.1f * 9.81f * Time.fixedDeltaTime * Time.fixedDeltaTime;
+        transform.localPosition = p;
+
+        //Vector3 prev = transform.position, next;
+        //for (int i = 1; i <= 10; i++)
+        //{
+        //    float t = i / 10f;
+        //    float dx = s * cosTheta * t;
+        //    float dy = s * sinTheta * t - 0.5f * g * t * t;
+        //    next = transform.position + new Vector3(dir.x * dx, dy, dir.y * dx);
+        //    Debug.DrawLine(prev, next, Color.blue);
+        //    prev = next;
+        //}
 
         //Vector3 directionToTarget = _targetPosition - transform.position;
         //Vector3 directionByXZ = new Vector3(0f, directionToTarget.y, directionToTarget.z);
