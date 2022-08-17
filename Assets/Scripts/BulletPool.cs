@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BulletPool : MonoBehaviour
 {
-    [SerializeField] private Bullet _bullet;
+    [SerializeField] private Bullet _bulletPrefab;
     [SerializeField] private ShootPoint _shootPoint;
 
     private List<Bullet> _bullets = new List<Bullet>();
@@ -32,7 +32,7 @@ public class BulletPool : MonoBehaviour
 
     private Bullet CreateBullet()
     {
-        Bullet newBullet = Instantiate(_bullet, _shootPoint.transform.position, _shootPoint.transform.rotation, transform);
+        Bullet newBullet = Instantiate(_bulletPrefab, _shootPoint.transform.position, _shootPoint.transform.rotation, transform);
         _bullets.Add(newBullet);
 
         return newBullet;
