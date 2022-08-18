@@ -16,7 +16,6 @@ public class ShootZone : MonoBehaviour, IPointerDownHandler
         {
             Vector3 targetPosition = hit.point;
             targetPosition.x = 0f;
-            Debug.Log(targetPosition);
             Shooted?.Invoke(targetPosition);
         }
     }

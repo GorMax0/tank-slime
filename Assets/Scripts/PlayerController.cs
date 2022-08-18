@@ -3,8 +3,6 @@ using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private BulletPool _bulletPool;
-    [SerializeField] private ShootZone _shootZone;
     [SerializeField] private Rigidbody _mover;
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _turnSpeed;
@@ -23,14 +21,12 @@ public class PlayerController : MonoBehaviour
     {
         _buttonForward.Moved += OnMove;
         _buttonBackward.Moved += OnMove;
-        _shootZone.Shooted += OnShoot;
     }
 
     private void OnDisable()
     {
         _buttonForward.Moved -= OnMove;
         _buttonBackward.Moved -= OnMove;
-        _shootZone.Shooted -= OnShoot;
     }
 
     private void FixedUpdate()
@@ -38,7 +34,7 @@ public class PlayerController : MonoBehaviour
         if (_canMove == true)
         {
             transform.Translate(_direction * _moveSpeed * Time.fixedDeltaTime);
-            _mover.transform.localRotation *= Quaternion.AngleAxis(_turnSpeed * Time.fixedDeltaTime, _rotationDirection);
+            _mover.transform.rotation *= Quaternion.AngleAxis(_turnSpeed * Time.fixedDeltaTime, _rotationDirection);
             _mover.isKinematic = false;
         }
         else if (_isStopped == false)
@@ -56,10 +52,5 @@ public class PlayerController : MonoBehaviour
         _rotationDirection = isMoveForward ? -Vector3.left : Vector3.left;
         _isStopped = false;
         Stopped?.Invoke(_isStopped);
-    }
-
-    private void OnShoot(Vector3 target)
-    {
-        _bulletPool.InvokeBullet(target);
     }
 }

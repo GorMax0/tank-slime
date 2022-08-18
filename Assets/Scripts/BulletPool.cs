@@ -4,19 +4,18 @@ using UnityEngine;
 public class BulletPool : MonoBehaviour
 {
     [SerializeField] private Bullet _bulletPrefab;
-    [SerializeField] private ShootPoint _shootPoint;
 
     private List<Bullet> _bullets = new List<Bullet>();
 
-    public void InvokeBullet(Vector3 target)
+    public void InvokeBullet(ShootPoint shootPoint, Vector3 trajectory)
     {
         Bullet freeBullet = GetFreeBullet();
 
-        freeBullet.transform.position = transform.position;
-        freeBullet.transform.rotation = transform.rotation;
+        freeBullet.transform.position = shootPoint.transform.position;
+        freeBullet.transform.rotation = new Quaternion(-shootPoint.transform.localRotation.x, 0f, 0f, 1f);
         freeBullet.gameObject.SetActive(true);
 
-        freeBullet.Launch(_shootPoint.transform.position, _shootPoint.transform.rotation, target);
+        freeBullet.Launch(trajectory);
     }
 
     private Bullet GetFreeBullet()
@@ -32,7 +31,7 @@ public class BulletPool : MonoBehaviour
 
     private Bullet CreateBullet()
     {
-        Bullet newBullet = Instantiate(_bulletPrefab, _shootPoint.transform.position, _shootPoint.transform.rotation, transform);
+        Bullet newBullet = Instantiate(_bulletPrefab, transform);
         _bullets.Add(newBullet);
 
         return newBullet;
