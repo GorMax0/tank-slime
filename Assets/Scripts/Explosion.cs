@@ -54,4 +54,12 @@ public class Explosion : MonoBehaviour
         position /= _rigidbodies.Length;
         return position;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out Bullet bullet))
+        {
+            Explode();
+        }
+    }  
 }
