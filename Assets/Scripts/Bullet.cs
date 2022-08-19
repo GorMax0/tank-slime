@@ -1,26 +1,27 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody), typeof(TrailRenderer))]
 public class Bullet : MonoBehaviour
 {
     private Rigidbody _rigidbody;
-    [SerializeField] private Quaternion _startRotation;
-    [SerializeField] private Quaternion _endRotation;
+    private TrailRenderer _trail;
+    private Quaternion _rotationOffset;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _trail = GetComponent<TrailRenderer>();
+        _rotationOffset = Quaternion.Euler(90f, 0f, 0f);
     }
 
     private void Update()
     {
-        //_endRotation = Quaternion.Euler(_rigidbody.velocity.y, 0f, 0f);
-        //transform.rotation = Quaternion.Slerp(transform.rotation, _endRotation, 0.05f);
+        transform.rotation = Quaternion.LookRotation(_rigidbody.velocity) * _rotationOffset;        
     }
 
     public void Launch(Vector3 velocity)
-    {
-     //   _startRotation = transform.rotation;        
+    { 
+        _trail.Clear();
         _rigidbody.velocity = velocity;        
 
         Debug.Log($"Start rotation: {_rigidbody.rotation}");

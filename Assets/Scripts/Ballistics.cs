@@ -19,17 +19,19 @@ public class Ballistics : MonoBehaviour
 
     private Vector3 TrajectoryCalculation(Vector3 targetPosition)
     {
-        Vector3 fromTo = targetPosition - transform.position;
-        Vector3 fromToXZ = new Vector3(fromTo.x, 0f, fromTo.z);
+        const float HalfCircleInDegrees = 180f;
+        const int Multiplier = 2;
+        Vector3 direction = targetPosition - transform.position;
+        Vector3 directionWithoutHeight = new Vector3(direction.x, 0f, direction.z);
 
-        float x = fromToXZ.magnitude;
-        float y = fromTo.y;
-        float angleInRadians = _angleInDegrees * Mathf.PI / 180;
+        float directionLength = directionWithoutHeight.magnitude;
+        float height = direction.y;
+        float angleInRadians = _angleInDegrees * Mathf.PI / HalfCircleInDegrees;
 
-        float v2 = (Physics.gravity.y * x * x) / (2 * (y - Mathf.Tan(angleInRadians) * x) * Mathf.Pow(Mathf.Cos(angleInRadians), 2));
-        float v = Mathf.Sqrt(Mathf.Abs(v2));
+        float speedSquare = (Physics.gravity.y * directionLength * directionLength) / (Multiplier * (height - Mathf.Tan(angleInRadians) * directionLength) * Mathf.Pow(Mathf.Cos(angleInRadians), Multiplier));
+        float speed = Mathf.Sqrt(Mathf.Abs(speedSquare));
 
-        return _shootPoint.transform.forward * v;
+        return _shootPoint.transform.forward * speed;
     }
 
     private void OnShoot(Vector3 targetPosition)
