@@ -7,7 +7,8 @@ public class Bone : MonoBehaviour
     private Rigidbody _rigidbody;
     private SphereCollider _sphereCollider;
     private SpringJoint[] _springJoints;
-    private float _minSpring = 10f;
+    private ConfigurableJoint _configurableJoint;
+    private float _minSpring;
     private float _maxSpring;
     private float _damping = 0.90f;
     private bool _isStopped;
@@ -17,6 +18,7 @@ public class Bone : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _sphereCollider = GetComponent<SphereCollider>();
         _springJoints = GetComponents<SpringJoint>();
+        _configurableJoint = GetComponent<ConfigurableJoint>();
     }
 
     private void FixedUpdate()
@@ -30,11 +32,20 @@ public class Bone : MonoBehaviour
         }
     }
 
-    public void Init(float maxSpring, float radius, float angularDrag)
+    public void Init(float minSpring,float maxSpring, float radius, float angularDrag)
     {
+        if (_minSpring < 0)
+            throw new ArgumentOutOfRangeException(nameof(_minSpring));
+
+        if (_maxSpring < 0)
+            throw new ArgumentOutOfRangeException(nameof(_maxSpring));
+
+        _minSpring = minSpring;
         _maxSpring = maxSpring;
         SetColliderSize(radius);
         SetAngularDrag(angularDrag);
+
+        _rigidbody.velocity = Vector3.zero;
     }
 
     public void SettingJoint(Rigidbody bone, float damper)
@@ -53,6 +64,13 @@ public class Bone : MonoBehaviour
             }
         }
     }
+
+    public void SetupConfiurableJoint(Rigidbody rootBone)
+    {
+        _configurableJoint.connectedBody = rootBone;
+        _configurableJoint.axis = transform.InverseTransformDirection(transform.localPosition);
+    }
+
     public void StopMovement(bool isStopped)
     {
         _isStopped = isStopped;

@@ -14,17 +14,15 @@ public class Bullet : MonoBehaviour
         _rotationOffset = Quaternion.Euler(90f, 0f, 0f);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        transform.rotation = Quaternion.LookRotation(_rigidbody.velocity) * _rotationOffset;        
+        transform.rotation = Quaternion.LookRotation(_rigidbody.velocity) * _rotationOffset;
     }
 
     public void Launch(Vector3 velocity)
     { 
         _trail.Clear();
         _rigidbody.velocity = velocity;        
-
-        Debug.Log($"Start rotation: {_rigidbody.rotation}");
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -53,4 +53,13 @@ public class PlayerController : MonoBehaviour
         _isStopped = false;
         Stopped?.Invoke(_isStopped);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.TryGetComponent(out StopPoint stopPoint))
+        {
+            _canMove = false;
+            Debug.Log("Stop!");
+        }
+    }
 }

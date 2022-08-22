@@ -21,6 +21,7 @@ public class Ballistics : MonoBehaviour
     {
         const float HalfCircleInDegrees = 180f;
         const int Multiplier = 2;
+
         Vector3 direction = targetPosition - transform.position;
         Vector3 directionWithoutHeight = new Vector3(direction.x, 0f, direction.z);
 
@@ -30,6 +31,7 @@ public class Ballistics : MonoBehaviour
 
         float speedSquare = (Physics.gravity.y * directionLength * directionLength) / (Multiplier * (height - Mathf.Tan(angleInRadians) * directionLength) * Mathf.Pow(Mathf.Cos(angleInRadians), Multiplier));
         float speed = Mathf.Sqrt(Mathf.Abs(speedSquare));
+        Debug.Log($"Vector {_shootPoint.transform.forward * speed}");
 
         return _shootPoint.transform.forward * speed;
     }

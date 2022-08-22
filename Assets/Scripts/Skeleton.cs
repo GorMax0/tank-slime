@@ -13,7 +13,8 @@ public class Skeleton : MonoBehaviour
     [SerializeField] private Bone _muzzle;
     [SerializeField] private Rigidbody _rigidbodyRootBone;
     [Header("Spring Joint Settings")]
-    [SerializeField] private float _defaultSpring;
+    [SerializeField] private float _minSpring;
+    [SerializeField] private float _maxSpring;
     [SerializeField] private float _damper;
     [Header("Other Settings")]
     [SerializeField, Range(0.002f, 0.7f)] private float _collidarRadius;
@@ -54,7 +55,8 @@ public class Skeleton : MonoBehaviour
         {
             for (int j = 0; j < _allBones[i].Length; j++)
             {
-                _allBones[i][j].Init(_defaultSpring, _collidarRadius, _angularDrag);
+                _allBones[i][j].Init(_minSpring, _maxSpring, _collidarRadius, _angularDrag);
+                _allBones[i][j].SetupConfiurableJoint(_rigidbodyRootBone);
 
                 if (i < _allBones.Count - 1)
                 {
