@@ -33,8 +33,9 @@ public class PlayerController : MonoBehaviour
     {
         if (_canMove == true)
         {
-            transform.Translate(_direction * _moveSpeed * Time.fixedDeltaTime);
+              transform.Translate(_direction * _moveSpeed * Time.fixedDeltaTime);
             _mover.transform.rotation *= Quaternion.AngleAxis(_turnSpeed * Time.fixedDeltaTime, _rotationDirection);
+          //  _mover.MovePosition(_mover.position + _direction * _moveSpeed * Time.fixedDeltaTime);
             _mover.isKinematic = false;
         }
         else if (_isStopped == false)
@@ -51,12 +52,13 @@ public class PlayerController : MonoBehaviour
         _direction = isMoveForward ? Vector3.forward : -Vector3.forward;
         _rotationDirection = isMoveForward ? -Vector3.left : Vector3.left;
         _isStopped = false;
+
         Stopped?.Invoke(_isStopped);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent(out StopPoint stopPoint))
+        if (other.TryGetComponent(out StopPoint stopPoint))
         {
             _canMove = false;
             Debug.Log("Stop!");
