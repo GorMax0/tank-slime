@@ -25,10 +25,12 @@ public class Bone : MonoBehaviour
     {
         if (_isStopped == false)
         {
-            _rigidbody.velocity *= _damping;
+            _rigidbody.velocity *= _damping; 
 
             if (_rigidbody.velocity == Vector3.zero)
+            {
                 _isStopped = true;
+            }
         }
     }
 
@@ -90,27 +92,5 @@ public class Bone : MonoBehaviour
             throw new ArgumentOutOfRangeException(nameof(angularDrag));
 
         _rigidbody.angularDrag = angularDrag;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.TryGetComponent(out Ground ground))
-        {
-            foreach (var joint in _springJoints)
-            {
-                joint.spring = _minSpring;
-            }
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.collider.TryGetComponent(out Ground ground))
-        {
-            foreach (var joint in _springJoints)
-            {
-                joint.spring = _maxSpring;
-            }
-        }
     }
 }

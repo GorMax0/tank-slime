@@ -78,6 +78,7 @@ public class Skeleton : MonoBehaviour
 
     private void OnStopped(bool isStopped)
     {
+        Debug.Log(isStopped);
         _muzzle.StopMovement(isStopped);
 
         foreach (Bone[] bones in _allBones)

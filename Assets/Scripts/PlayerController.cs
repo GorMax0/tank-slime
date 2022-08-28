@@ -6,9 +6,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody _mover;
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _turnSpeed;
-    [Header("Control Buttons")]
-    [SerializeField] private MoverButton _buttonForward;
-    [SerializeField] private MoverButton _buttonBackward;
+    [SerializeField] private InputHandler _inputHandler;
 
     private Vector3 _direction;
     private Vector3 _rotationDirection;
@@ -19,38 +17,34 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        _buttonForward.Moved += OnMove;
-        _buttonBackward.Moved += OnMove;
+        _inputHandler.Moved += OnMove;
     }
 
     private void OnDisable()
     {
-        _buttonForward.Moved -= OnMove;
-        _buttonBackward.Moved -= OnMove;
+        _inputHandler.Moved -= OnMove;
     }
 
     private void FixedUpdate()
     {
         if (_canMove == true)
         {
-              transform.Translate(_direction * _moveSpeed * Time.fixedDeltaTime);
+            transform.Translate(_direction * _moveSpeed * Time.fixedDeltaTime);
             _mover.transform.rotation *= Quaternion.AngleAxis(_turnSpeed * Time.fixedDeltaTime, _rotationDirection);
-          //  _mover.MovePosition(_mover.position + _direction * _moveSpeed * Time.fixedDeltaTime);
             _mover.isKinematic = false;
         }
         else if (_isStopped == false)
         {
-            _mover.velocity = Vector3.zero;
             _mover.isKinematic = true;
             _isStopped = true;
         }
     }
 
-    private void OnMove(bool canMove, bool isMoveForward)
+    private void OnMove(bool canMove, Vector3 direction, Vector3 rotation)
     {
         _canMove = canMove;
-        _direction = isMoveForward ? Vector3.forward : -Vector3.forward;
-        _rotationDirection = isMoveForward ? -Vector3.left : Vector3.left;
+        _direction = direction;
+        _rotationDirection = rotation;
         _isStopped = false;
 
         Stopped?.Invoke(_isStopped);
