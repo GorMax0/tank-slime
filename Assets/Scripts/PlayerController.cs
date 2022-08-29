@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
         if (_canMove == true)
         {
             transform.Translate(_direction * _moveSpeed * Time.fixedDeltaTime);
-            _mover.transform.rotation *= Quaternion.AngleAxis(_turnSpeed * Time.fixedDeltaTime, _rotationDirection);
+            _mover.transform.Rotate(new Vector3(_rotationDirection.x, 0, 0) * _turnSpeed, Space.Self);
             _mover.isKinematic = false;
         }
         else if (_isStopped == false)
