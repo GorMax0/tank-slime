@@ -1,1 +1,1 @@
-Warning: None triangle mesh: Cube.011 (file: 'E:\_Vampiruga_\Unity\Torture\Tank-slime\Assets\Models\WallWhole.fbx') []
+Warning: None triangle mesh: Cylinder (file: 'E:\_Vampiruga_\Unity\Torture\Tank-slime\Assets\Models\Bullet.fbx') []

@@ -1,23 +1,26 @@
 using UnityEngine;
 
+[RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(BoxCollider))]
 public class Explosion : MonoBehaviour
 {
-    [SerializeField]private float _explosionPower;
-     [SerializeField]private Transform _parts;    
+    [SerializeField] private float _explosionPower;
+    [SerializeField] private Brick[] _bricks;
 
     private bool _isExploded;
     private MeshRenderer _meshRenderer;
-    private Rigidbody [] _rigidbodies; 
+    private BoxCollider _collider;
 
     private void Awake()
     {
         _meshRenderer = GetComponent<MeshRenderer>();
-        _rigidbodies = _parts.GetComponentsInChildren<Rigidbody>();
+        _collider = GetComponent<BoxCollider>();
     }
 
     private void Start()
     {
-        _parts.gameObject.SetActive(false);
+        foreach (Brick brick in _bricks)
+            brick.gameObject.SetActive(false);
     }
 
     public void Explode()
@@ -30,36 +33,37 @@ public class Explosion : MonoBehaviour
         _isExploded = true;
 
         Vector3 origin = GetAveragePosition();
-        _parts.gameObject.SetActive(true);
         _meshRenderer.enabled = false;
 
-        foreach (var rigidbody in _rigidbodies)
+        foreach (Brick brick in _bricks)
         {
             var randomForce = Random.Range(0.3f, 1.5f);
-            Vector3 force = (rigidbody.transform.position - origin).normalized * _explosionPower + new Vector3(0f,randomForce,randomForce);
-            rigidbody.isKinematic = false;
-            rigidbody.AddForce(force, ForceMode.VelocityChange);
+            Vector3 force = (brick.transform.position - origin).normalized * _explosionPower + new Vector3(0f, randomForce, randomForce);
+
+            brick.gameObject.SetActive(true);
+            brick.Break(force);
         }
     }
 
     private Vector3 GetAveragePosition()
     {
-        Vector3 position = Vector3.zero;       
+        Vector3 position = Vector3.zero;
 
-        foreach(var rigidbody in _rigidbodies)
+        foreach (var brick in _bricks)
         {
-            position += rigidbody.transform.position;
+            position += brick.transform.position;
         }
 
-        position /= _rigidbodies.Length;
+        position /= _bricks.Length;
         return position;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.TryGetComponent(out Bullet bullet))
+        if (collision.collider.TryGetComponent(out Bullet bullet))
         {
             Explode();
+            _collider.enabled = false;
         }
-    }  
+    }
 }

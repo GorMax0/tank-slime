@@ -1,8 +1,11 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(TrailRenderer))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(TrailRenderer))]
 public class Bullet : MonoBehaviour
 {
+    [SerializeField] private ParticleSystem _hitEffect;
+
     private Rigidbody _rigidbody;
     private TrailRenderer _trail;
     private Quaternion _rotationOffset;
@@ -20,13 +23,14 @@ public class Bullet : MonoBehaviour
     }
 
     public void Launch(Vector3 velocity)
-    { 
+    {
         _trail.Clear();
-        _rigidbody.velocity = velocity;        
+        _rigidbody.velocity = velocity;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        Instantiate(_hitEffect, transform.position, Quaternion.identity);
         gameObject.SetActive(false);
     }
 }
