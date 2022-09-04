@@ -124,10 +124,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.12000005
-  m_Height: 0.47690555
+  m_Radius: 0.100000046
+  m_Height: 0.39742127
   m_Direction: 1
-  m_Center: {x: 0, y: -0.06486148, z: 0.000000022351747}
+  m_Center: {x: 0, y: -0.054051224, z: 0.000000018626455}
 --- !u!96 &1282174582989135783
 TrailRenderer:
   serializedVersion: 2

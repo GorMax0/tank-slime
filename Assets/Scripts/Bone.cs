@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(SphereCollider), typeof(SpringJoint))]
+[RequireComponent(typeof(SphereCollider))]
+[RequireComponent(typeof(SpringJoint))]
 public class Bone : MonoBehaviour
 {
     private Rigidbody _rigidbody;
