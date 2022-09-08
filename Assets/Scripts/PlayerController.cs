@@ -8,8 +8,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _turnSpeed;
     [SerializeField] private InputHandler _inputHandler;
 
+    private const float StepLerp = 0.1f;
+
     private Vector3 _direction;
     private Vector3 _rotationDirection;
+    private float _currentMoveSpeed;
+    private float _currentTurnSpeed;
     private bool _canMove;
     private bool _isStopped;
 
@@ -29,12 +33,18 @@ public class PlayerController : MonoBehaviour
     {
         if (_canMove == true)
         {
-            transform.Translate(_direction * _moveSpeed * Time.fixedDeltaTime);
-            _mover.transform.Rotate(new Vector3(_rotationDirection.x, 0, 0) * _turnSpeed, Space.Self);
+            _currentMoveSpeed = Mathf.Lerp(_currentMoveSpeed, _moveSpeed, StepLerp);
+            transform.Translate(_direction * _currentMoveSpeed * Time.fixedDeltaTime);
+
+            _currentTurnSpeed = Mathf.Lerp(_currentTurnSpeed, _turnSpeed, StepLerp);
+            _mover.transform.Rotate(new Vector3(_rotationDirection.x, 0, 0) * _currentTurnSpeed, Space.Self);
+
             _mover.isKinematic = false;
         }
         else if (_isStopped == false)
         {
+            _currentMoveSpeed = 0;
+            _currentTurnSpeed = 0;
             _mover.isKinematic = true;
             _isStopped = true;
         }
