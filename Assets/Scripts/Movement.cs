@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PlayerController : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     [SerializeField] private Rigidbody _mover;
     [SerializeField] private float _moveSpeed;
@@ -59,6 +59,8 @@ public class PlayerController : MonoBehaviour
 
         Stopped?.Invoke(_isStopped);
     }
+
+    // Разобраться со стопом _isStopped в OnMove всегда вызывает false;
 
     private void OnTriggerEnter(Collider other)
     {

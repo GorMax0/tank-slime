@@ -19,7 +19,7 @@ public class Skeleton : MonoBehaviour
     [Header("Other Settings")]
     [SerializeField, Range(0.002f, 0.7f)] private float _collidarRadius;
     [SerializeField] private float _angularDrag = 10f;
-    [SerializeField] private PlayerController _playerController;
+    [SerializeField] private Movement _playerMovement;
 
     private List<Bone[]> _allBones = new List<Bone[]>();
 
@@ -36,12 +36,12 @@ public class Skeleton : MonoBehaviour
 
     private void OnEnable()
     {
-        _playerController.Stopped += OnStopped;
+        _playerMovement.Stopped += OnStopped;
     }
 
     private void OnDisable()
     {
-        _playerController.Stopped -= OnStopped;
+        _playerMovement.Stopped -= OnStopped;
     }
 
     private void Start()

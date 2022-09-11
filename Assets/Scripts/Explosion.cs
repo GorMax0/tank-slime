@@ -4,7 +4,12 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class Explosion : MonoBehaviour
 {
-    [SerializeField] private float _explosionPower;
+    [SerializeField] private float _minExplosionPower;
+    [SerializeField] private float _maxExplosionPower;
+    [SerializeField] private float _minForceY;
+    [SerializeField] private float _maxForceY;
+    [SerializeField] private float _minForceZ;
+    [SerializeField] private float _maxForceZ;
     [SerializeField] private Brick[] _bricks;
 
     private bool _isExploded;
@@ -26,9 +31,7 @@ public class Explosion : MonoBehaviour
     public void Explode()
     {
         if (_isExploded)
-        {
-            return;
-        }
+            return;     
 
         _isExploded = true;
 
@@ -37,8 +40,10 @@ public class Explosion : MonoBehaviour
 
         foreach (Brick brick in _bricks)
         {
-            var randomForce = Random.Range(0.3f, 1.5f);
-            Vector3 force = (brick.transform.position - origin).normalized * _explosionPower + new Vector3(0f, randomForce, randomForce);
+            float randomForceY = Random.Range(_minForceY, _maxForceY);
+            float randomForceZ = Random.Range(_minForceZ, _maxForceZ);
+            float explosionPower = Random.Range(_minExplosionPower, _maxExplosionPower);
+            Vector3 force = (brick.transform.position - origin).normalized + explosionPower * new Vector3(0f, randomForceY, randomForceZ);
 
             brick.gameObject.SetActive(true);
             brick.Break(force);
