@@ -22,7 +22,7 @@ public class Ballistics : MonoBehaviour
         const float HalfCircleInDegrees = 180f;
         const int Multiplier = 2;
 
-        Vector3 direction = targetPosition - transform.position;
+        Vector3 direction = targetPosition - _shootPoint.transform.position;
         Vector3 directionWithoutHeight = new Vector3(direction.x, 0f, direction.z);
 
         float directionLength = directionWithoutHeight.magnitude;
