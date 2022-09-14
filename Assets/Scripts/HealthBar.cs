@@ -6,18 +6,20 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     [SerializeField] private Slider _slider;
-    [SerializeField] private Health _health;
+    [SerializeField] private Tank _tank;
     [SerializeField] private Movement _playerMovement;
     [SerializeField] private Transform _mover;
     [SerializeField] private float _positionOffsetY;
 
+    private Health _health;
     private Vector3 _currentPosition;
 
     private void OnEnable()
     {
         _playerMovement.Stopped += OnStopped;
-        _health.Initialized += OnInitialized;
-        _health.Changed += OnChanged;
+
+        if (_health != null)
+            _health.Changed += OnChanged;
     }
 
 
@@ -29,6 +31,9 @@ public class HealthBar : MonoBehaviour
 
     private void Start()
     {
+        _health = _tank.Health;
+        _health.Changed += OnChanged;
+
         transform.rotation = Camera.main.transform.rotation;
     }
 
@@ -38,15 +43,7 @@ public class HealthBar : MonoBehaviour
         transform.position = _currentPosition;
     }
 
-    private void OnInitialized(int health)
-    {
-        _slider.maxValue = health;
-        _slider.value = _slider.maxValue;
-
-        _health.Initialized -= OnInitialized;
-    }
-
-    private void OnChanged(int currentHealth)
+    private void OnChanged(float currentHealth)
     {
         if (currentHealth >= 0)
             _slider.value = currentHealth;

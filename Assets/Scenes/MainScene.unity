@@ -15158,13 +15158,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7372659124738384679}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4edaa74f26933a40ac1506e8db23462, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b62a7064b4d3f2459e1ce7716d0aa20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _shootZone: {fileID: 388449707}
   _bulletPool: {fileID: 1344538688}
   _shootPoint: {fileID: 2139052974}
-  _angleInDegrees: 45
 --- !u!1 &578617602 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6488629811439162375, guid: 3c3bb687df9316949b85f2e0710566cb, type: 3}
@@ -19382,10 +19381,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 759599252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a2521fb5691ec248b03cfcee678c622, type: 3}
+  m_Script: {fileID: 11500000, guid: 1be262ea8c9c8fa4f8d400f784cb2511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxValue: 100
+  _maxHealth: 100
 --- !u!54 &759599258
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -29585,7 +29584,7 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 1
-  m_WholeNumbers: 1
+  m_WholeNumbers: 0
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
@@ -42436,7 +42435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 1260935108}
-  _health: {fileID: 759599257}
+  _tank: {fileID: 759599257}
   _playerMovement: {fileID: 759599255}
   _mover: {fileID: 5746564758862095140}
   _positionOffsetY: 1

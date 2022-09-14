@@ -1,44 +1,24 @@
 using UnityEngine;
 
-public class Ballistics : MonoBehaviour
+public class Ballistics
 {
-    [SerializeField] private ShootZone _shootZone;
-    [SerializeField] private BulletPool _bulletPool;
-    [SerializeField] private ShootPoint _shootPoint;
-    [SerializeField] private float _angleInDegrees;
-
-    private void OnEnable()
+    public Vector3 TrajectoryCalculation(Transform shootPoint, Vector3 targetPosition)
     {
-        _shootZone.Shooted += OnShoot;
-    }
-
-    private void OnDisable()
-    {
-        _shootZone.Shooted -= OnShoot;
-    }
-
-    private Vector3 TrajectoryCalculation(Vector3 targetPosition)
-    {
+        const float AngleInDegrees = 45f;
         const float HalfCircleInDegrees = 180f;
         const int Multiplier = 2;
 
-        Vector3 direction = targetPosition - _shootPoint.transform.position;
+        Vector3 direction = targetPosition - shootPoint.position;
         Vector3 directionWithoutHeight = new Vector3(direction.x, 0f, direction.z);
 
         float directionLength = directionWithoutHeight.magnitude;
         float height = direction.y;
-        float angleInRadians = _angleInDegrees * Mathf.PI / HalfCircleInDegrees;
+        float angleInRadians = AngleInDegrees * Mathf.PI / HalfCircleInDegrees;
 
         float speedSquare = (Physics.gravity.y * directionLength * directionLength) / (Multiplier * (height - Mathf.Tan(angleInRadians) * directionLength) * Mathf.Pow(Mathf.Cos(angleInRadians), Multiplier));
         float speed = Mathf.Sqrt(Mathf.Abs(speedSquare));
-        Debug.Log($"Vector {_shootPoint.transform.forward * speed}");
+        Debug.Log($"Vector {shootPoint.forward * speed}");
 
-        return _shootPoint.transform.forward * speed;
-    }
-
-    private void OnShoot(Vector3 targetPosition)
-    {
-        Vector3 trajectory = TrajectoryCalculation(targetPosition);
-        _bulletPool.InvokeBullet(_shootPoint, trajectory);
-    }
+        return shootPoint.forward * speed;
+    }   
 }

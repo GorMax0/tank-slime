@@ -1,36 +1,30 @@
 using System;
-using UnityEngine;
-using UnityEngine.Events;
 
-public class Health : MonoBehaviour
+public class Health
 {
-    [SerializeField] private int _maxValue;
-
+    private int _maxValue;
     private int _currentValue;
 
-    public UnityAction<int> Initialized;
-    public UnityAction<int> Changed;
-
-    private void Start()
+    public Health(int maxHealth)
     {
+        _maxValue = maxHealth;
         _currentValue = _maxValue;
-        Initialized?.Invoke(_currentValue);
+
+        float normalizedValue = _currentValue / _maxValue;
+        Changed?.Invoke(normalizedValue);
     }
+
+    public Action<float> Changed;
 
     public void TakeDamage(int damage)
     {
         if (damage < 0)
             throw new ArgumentOutOfRangeException($"Invalid damage value: {damage}");
 
-        _currentValue = Mathf.Clamp(_currentValue - damage, 0, _maxValue);
-        Changed?.Invoke(_currentValue);
-    }
+        damage = _currentValue - damage < 0 ? damage - _currentValue : damage;
+        _currentValue -= damage;
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.collider.TryGetComponent(out Bullet bullet))
-        {
-            TakeDamage(bullet.Damage);
-        }
+        float normalizedValue = _currentValue / _maxValue;
+        Changed?.Invoke(normalizedValue);
     }
 }

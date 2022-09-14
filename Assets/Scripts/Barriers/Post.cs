@@ -5,7 +5,7 @@ public class Post : MonoBehaviour
 {
     [SerializeField] private Bullet _bullet;
     [SerializeField] private ShootPoint _shootPoint;
-    [SerializeField] private Health _playerHealth;
+    [SerializeField] private Tank _playerHealth;
     [SerializeField] private Transform _weapon;
     [SerializeField] private float _distance;
     [SerializeField] private float _speed;
@@ -16,8 +16,8 @@ public class Post : MonoBehaviour
 
     private void Update()
     {
-        _direction = _playerHealth.transform.position;
-
+        _direction = _playerHealth.transform.position - _weapon.transform.position;
+        _weapon.rotation = Quaternion.LookRotation(_direction);
         DetectTarget();
     }
 
