@@ -10,6 +10,8 @@ public class Bullet : MonoBehaviour
     private TrailRenderer _trail;
     private Quaternion _rotationOffset;
 
+    public int Damage { get; private set; } = 1;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();

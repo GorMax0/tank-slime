@@ -25,4 +25,12 @@ public class Health : MonoBehaviour
         _currentValue = Mathf.Clamp(_currentValue - damage, 0, _maxValue);
         Changed?.Invoke(_currentValue);
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.TryGetComponent(out Bullet bullet))
+        {
+            TakeDamage(bullet.Damage);
+        }
+    }
 }
