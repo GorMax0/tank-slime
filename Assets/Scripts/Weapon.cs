@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    [SerializeField] private ShootZone _shootZone;
+    [SerializeField] private Bullet _bullet;
     [SerializeField] private BulletPool _bulletPool;
     [SerializeField] private ShootPoint _shootPoint;
+    [SerializeField] private int _damage;
 
     private Ballistics _ballistics;
 
@@ -15,19 +16,9 @@ public class Weapon : MonoBehaviour
         _ballistics = new Ballistics();
     }
 
-    private void OnEnable()
+    public void Shoot()
     {
-        _shootZone.Shooted += OnShoot;
-    }
-
-    private void OnDisable()
-    {
-        _shootZone.Shooted -= OnShoot;
-    }
-
-    private void OnShoot(Vector3 targetPosition)
-    {
-        Vector3 trajectory = _ballistics.TrajectoryCalculation(_shootPoint.transform, targetPosition);
-        _bulletPool.InvokeBullet(_shootPoint, trajectory);
+        Vector3 trajectory = _ballistics.TrajectoryCalculation(_shootPoint.transform, Vector3.forward);
+        _bulletPool.InvokeBullet(_bullet, _shootPoint, trajectory, _damage);
     }
 }

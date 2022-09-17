@@ -3,35 +3,33 @@ using UnityEngine;
 
 public class BulletPool : MonoBehaviour
 {
-    [SerializeField] private Bullet _bulletPrefab;
-
     private List<Bullet> _bullets = new List<Bullet>();
 
-    public void InvokeBullet(ShootPoint shootPoint, Vector3 trajectory)
+    public void InvokeBullet(Bullet template, ShootPoint shootPoint, Vector3 trajectory, int damage)
     {
-        Bullet freeBullet = GetFreeBullet();
-
+        Bullet freeBullet = GetFreeBullet(template);
+        
         freeBullet.transform.position = shootPoint.transform.position;
         freeBullet.transform.rotation = new Quaternion(-shootPoint.transform.localRotation.x, 0f, 0f, 1f);
         freeBullet.gameObject.SetActive(true);
 
-        freeBullet.Launch(trajectory);
+        freeBullet.Launch(trajectory,damage);
     }
 
-    private Bullet GetFreeBullet()
+    private Bullet GetFreeBullet(Bullet template)
     {
         foreach (Bullet bullet in _bullets)
         {
-            if (bullet.gameObject.activeSelf == false)
+            if (bullet.gameObject.activeSelf == false && bullet.Type == template.Type)
                 return bullet;
         }
 
-        return CreateBullet();
+        return CreateBullet(template);
     }
 
-    private Bullet CreateBullet()
+    private Bullet CreateBullet(Bullet template)
     {
-        Bullet newBullet = Instantiate(_bulletPrefab, transform);
+        Bullet newBullet = Instantiate(template, transform);
         _bullets.Add(newBullet);
 
         return newBullet;

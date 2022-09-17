@@ -5,12 +5,14 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private ParticleSystem _hitEffect;
+    [SerializeField] private BulletType _type;
 
     private Rigidbody _rigidbody;
     private TrailRenderer _trail;
     private Quaternion _rotationOffset;
 
     public int Damage { get; private set; } = 1;
+    public BulletType Type => _type;
 
     private void Awake()
     {
@@ -24,9 +26,10 @@ public class Bullet : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(_rigidbody.velocity) * _rotationOffset;
     }
 
-    public void Launch(Vector3 velocity)
+    public void Launch(Vector3 velocity, int damage)
     {
         _trail.Clear();
+        Damage = damage;
         _rigidbody.velocity = velocity;
     }
 

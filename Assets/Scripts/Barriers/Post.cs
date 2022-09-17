@@ -3,27 +3,24 @@ using UnityEngine;
 
 public class Post : MonoBehaviour
 {
-    [SerializeField] private Bullet _bullet;
-    [SerializeField] private ShootPoint _shootPoint;
+    [SerializeField] private Weapon _weapon;
     [SerializeField] private Tank _playerHealth;
-    [SerializeField] private Transform _weapon;
     [SerializeField] private float _distance;
     [SerializeField] private float _speed;
     [SerializeField] private List<GameObject> _boxMans;
 
-    private Vector3 _direction;
     private float _cooldown = 0.1f;
 
     private void Update()
     {
-        _direction = _playerHealth.transform.position - _weapon.transform.position;
-        _weapon.rotation = Quaternion.LookRotation(_direction);
+        _weapon.transform.LookAt(_playerHealth.transform);
+        Debug.DrawLine(_weapon.transform.position, _playerHealth.transform.position, Color.red);
         DetectTarget();
     }
 
     private void DetectTarget()
     {
-        float distanceToTarget = (_playerHealth.transform.position - _shootPoint.transform.position).magnitude;
+        float distanceToTarget = (_playerHealth.transform.position - transform.position).magnitude;
 
         if (distanceToTarget <= _distance && _cooldown <= 0)
             Shoot();
@@ -33,14 +30,13 @@ public class Post : MonoBehaviour
 
     private void Shoot()
     {
-        Bullet bullet = Instantiate(_bullet, _shootPoint.transform.position, Quaternion.identity);
-        bullet.Launch(-new Vector3(0f, _playerHealth.transform.position.y, _playerHealth.transform.position.z).normalized * _speed);
+        _weapon.Shoot();
         _cooldown = 0.1f;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.TryGetComponent(out Bullet bullet))
+        if (collision.collider.TryGetComponent(out Bullet bullet) && bullet.Type == BulletType.Tank)
         {
             _weapon.gameObject.SetActive(false);
             _boxMans.ForEach(man => man.gameObject.SetActive(false));
